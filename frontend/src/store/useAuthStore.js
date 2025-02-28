@@ -33,7 +33,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  logout: async () => {
+  logout: async (data) => {
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
@@ -53,5 +53,13 @@ export const useAuthStore = create((set) => ({
     } finally {
       set({ isLoggingIn: false });
     }
+  },
+  updateProfile: async (data) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const res = await axiosInstance.get("/auth/check");
+
+      set({ authUser: [...res.data, data] });
+    } catch (error) {}
   },
 }));
